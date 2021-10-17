@@ -11,3 +11,4 @@ flask_sqlalchemy
 flask_sqlalchemy
 flask_bcrypt
 pytest_html
+PyJWT
