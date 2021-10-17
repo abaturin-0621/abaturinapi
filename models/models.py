@@ -15,11 +15,14 @@ class User(db.Model):
                 'time': current_time,
                 'user_id': self.id
             }
-        return jwt.encode(
+
+        token=jwt.encode(
                 token_data,
                 app.config.get('SECRET_KEY'),
                 algorithm='HS256',
-            ).decode("utf-8") 
+            )    
+          
+        return token.decode("utf-8") 
 
     def decode_auth_token(token):
         current_time=dt.timestamp(dt.now())
