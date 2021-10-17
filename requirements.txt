@@ -1,0 +1,12 @@
+certifi==2021.10.8
+wincertstore==0.2
+jwt
+flask_restx
+flask
+pytest
+requests
+pytest_cases
+pytest_schema
+flask_sqlalchemy
+flask_sqlalchemy
+flask_bcrypt

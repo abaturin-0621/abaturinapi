@@ -23,7 +23,7 @@ api = Api(
     version='1.0',
     description='User and items managment',
     doc='/swagger',
-    base_url='/api',
+    # base_url='/api',
     catch_all_404s=True,
     
     
