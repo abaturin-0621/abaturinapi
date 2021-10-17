@@ -10,3 +10,4 @@ pytest_schema
 flask_sqlalchemy
 flask_sqlalchemy
 flask_bcrypt
+pytest_html
