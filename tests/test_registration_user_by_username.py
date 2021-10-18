@@ -8,29 +8,6 @@ from pytest_cases import  parametrize_with_cases, case, get_case_id, parametrize
 from pytest_schema import  schema, And, Enum, Optional, Or, Regex, SchemaError
 from utils.utils import *
 
-def get_url():
-    ###TODO  must be config 
-    return "http://127.0.0.1:5000"
-
-def get_unique_user():
-    """Return username and password by template : user_{timestamp}"""
-
-    unique=calendar.timegm(time.gmtime())
-    return  {
-              "username":f"user_{unique}", 
-              "password":f"password_{unique}"
-              }
-
-def get_existing_user():
-    ###TODO  must be query db or get request
-    """Return  existing username and password """
-    
-    return  {
-              "username":"myusertest1", 
-              "password":"myusertest1"
-              }
-
-
 class TestCase():
     """TestCase method: Registration user by username"""
       
