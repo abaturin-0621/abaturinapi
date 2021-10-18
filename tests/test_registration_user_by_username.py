@@ -1,9 +1,10 @@
 import calendar
 import time
 import pytest
+from pytest_cases.fixture_core2 import fixture
 import requests
 import json
-from pytest_cases import  parametrize_with_cases, case, get_case_id, parametrize
+from pytest_cases import  parametrize_with_cases, case, get_case_id, parametrize,fixture_ref
 from pytest_schema import  schema, And, Enum, Optional, Or, Regex, SchemaError
 
 
@@ -29,12 +30,19 @@ def get_existing_user():
               "password":"myusertest1"
               }
 
-class TestCase:
-    """TestCase method: Registration user by username"""
+# class InputCaseContext():
+     
 
+
+
+
+class TestCase():
+    """TestCase method: Registration user by username"""
+    
+    
     body={
-        "username": get_unique_user()["username"],
-        "password": get_unique_user()["password"]
+        "username": "username",
+        "password": "password"
         }
     headers={'Content-Type': 'application/json'}
     parameters=None
@@ -43,17 +51,24 @@ class TestCase:
         }
     status_code=200 #default value, must be change in  every case function
 
+  
+
+
     #####################################################################################
-    def case_positive_request(self):
-        """positive:  valid request"""        
+    def case_positive_request(self,UNIQ_USER):
+        """positive:  valid request"""   
+        self.body={
+        "username": UNIQ_USER["username"],
+        "password": UNIQ_USER["password"]
+        }     
         self.status_code=201
         return self.body,self.headers,self.parameters,self.response_schema,self.status_code
     #####################################################################################
-    def case_negative_user_already_exists (self):
+    def case_negative_user_already_exists (self,EXISTING_USER):
         """negative :user_already_exists"""  
         self.body={
-        "username": get_existing_user()["username"],
-        "password": get_existing_user()["password"],
+        "username": EXISTING_USER["username"],
+        "password": EXISTING_USER["password"],
         }
         self.status_code=409
         return self.body,self.headers,self.parameters,self.response_schema,self.status_code    
@@ -61,19 +76,27 @@ class TestCase:
     #####################################################################################
     @parametrize("body",
                         [
-                             {"login": get_unique_user()["username"],"pass": get_unique_user()["password"]}, #invalid body shema parameters
-                             {},  #invalid body shema emtpy
-                             {"username":"","password": get_existing_user()["password"]}, #invalid body shema no username
-                             {"username":get_existing_user()["username"],"password": ""}, #invalid body shema no password
-                             {"username":"s","password": get_existing_user()["password"]}, #invalid body shema short username
-                             {"username":get_unique_user()["username"],"password": "s"}, #invalid body shema short password
+                           {},  #invalid body shema emtpy
+                            
                         ]
                 )    
-    def case_negative_invalid_body_request(self,body):
-        """negative :invalid body""" 
+    def case_negative_empty_body_request(self,body):
+        """negative :empty body""" 
         self.body=body
         self.status_code=400
-        return self.body,self.headers,self.parameters,self.response_schema,self.status_code    
+        return self.body,self.headers,self.parameters,self.response_schema,self.status_code   
+    
+     # #####################################################################################
+    @parametrize("username",[ "UNIQ_USER","long_name"])    
+    @parametrize("password",[ "emty_pass","long_pass"])   
+    def case_negative_invalid_body_request(self,username,password):
+        """negative :invalid body""" 
+        self.body["username"]=username
+        self.body["password"]=password
+        self.status_code=400
+        return self.body,self.headers,self.parameters,self.response_schema,self.status_code   
+
+
 
 
     #####################################################################################

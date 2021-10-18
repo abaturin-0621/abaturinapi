@@ -3,7 +3,7 @@ import time
 import pytest
 
 def pytest_addoption(parser):
-    parser.addoption("--baseUrl", action="store", default="http://127.0.0.1:5000/",help="baseUrl")
+    parser.addoption("--baseUrl", action="store", default="http://127.0.0.1:5000",help="baseUrl")
 
 
 
@@ -46,7 +46,7 @@ def RECEIVER_USER():
 @pytest.fixture()
 def EXISTING_USER():
     """Return existing username and password by template : receiver_{timestamp}"""
-    unique=calendar.timegm(time.gmtime())
+    
     return  {
               "username":"myusertest1", 
               "password":"myusertest1"
