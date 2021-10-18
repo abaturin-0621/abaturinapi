@@ -51,3 +51,12 @@ def EXISTING_USER():
               "username":"myusertest1", 
               "password":"myusertest1"
               }                
+
+@pytest.fixture()
+def NO_EXISTING_USER():
+    """Return existing username and password by template : receiver_{timestamp}"""
+    
+    return  {
+              "username":"myusertestnone", 
+              "password":"myusertestnone"
+              }                

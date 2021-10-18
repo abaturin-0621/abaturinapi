@@ -5,37 +5,8 @@ import requests
 import json
 from pytest_cases import  parametrize_with_cases, case, get_case_id, parametrize
 from pytest_schema import  schema, And, Enum, Optional, Or, Regex, SchemaError
+from utils.utils import *
 
-
-def get_url():
-    return "http://127.0.0.1:5000"
-
-def get_unique_user():
-    """Return username and password by template : user_{timestamp}"""
-
-    unique=calendar.timegm(time.gmtime())
-    return  {
-              "username":f"user_{unique}", 
-              "password":f"password_{unique}"
-              }
-
-def get_existing_user():
-    ###TODO  must be query db or get request
-    """Return  existing username and password """
-    
-    return  {
-              "username":"myusertest1", 
-              "password":"myusertest1"
-              }
-     
-def get_no_existing_user():
-    ###TODO  must be query db or get request
-    """Return  no_existing username and password """
-    
-    return  {
-              "username":"myusertestnone", 
-              "password":"myusertestnone"
-              }
 
 
 
@@ -43,8 +14,8 @@ class TestCase:
     """TestCase method: Registration user by username"""
 
     body={
-        "username": get_existing_user()["username"],
-        "password": get_existing_user()["password"]
+        "username": "username",
+        "password": "password"
         }
     headers={'Content-Type': 'application/json'}
     parameters=None
@@ -54,44 +25,63 @@ class TestCase:
     status_code=200 #default value, must be change in  every case function
 
     #####################################################################################
-    def case_positive_request(self):
+    def case_positive_request(self, EXISTING_USER):##EXISTING_USER fixture ,  see  conftest.py
         """positive:  valid request"""
-
+        self.body={
+        "username": EXISTING_USER["username"],
+        "password": EXISTING_USER["password"]
+        }
         self.status_code=200
         return self.body,self.headers,self.parameters,self.response_schema,self.status_code
 
     #####################################################################################
-    def case_negative_user_no_exists (self):
+    def case_negative_user_no_exists (self,NO_EXISTING_USER):
         """negative :user_no_exists"""
 
         self.body={
-        "username": get_no_existing_user()["username"],
-        "password": get_no_existing_user()["password"]
+        "username": NO_EXISTING_USER["username"],
+        "password": NO_EXISTING_USER["password"]
         }
         self.status_code=401
         return self.body,self.headers,self.parameters,self.response_schema,self.status_code 
+    #####################################################################################
+    def case_negative_invalid_password (self,EXISTING_USER,NO_EXISTING_USER):
+        """negative :user_no_exists"""
 
+        self.body={
+        "username": EXISTING_USER["username"],
+        "password": NO_EXISTING_USER["password"]
+        }
+        self.status_code=401
+        return self.body,self.headers,self.parameters,self.response_schema,self.status_code 
+ 
+    ######################################################################################
+    @parametrize("username",[VALID_NONE,VALID_BOOLEAN,VALID_NUMBER_INT,VALID_NUMBER_FLOAT,VALID_SLASH,VALID_SHORT_STRING,VALID_LONG_STRING,VALID_QUOTE])    
+    @parametrize("password",[VALID_NONE,VALID_BOOLEAN,VALID_NUMBER_INT,VALID_NUMBER_FLOAT,VALID_SLASH,VALID_SHORT_STRING,VALID_LONG_STRING,VALID_QUOTE])   
+    def case_negative_invalid_body_request(self,username,password):
+        """negative :invalid body""" 
+        self.body["username"]=username
+        self.body["password"]=password
+        self.status_code=400
+        return self.body,self.headers,self.parameters,self.response_schema,self.status_code   
     #####################################################################################
     @parametrize("body",
                         [
-                             {"login": get_no_existing_user()["username"],"pass": get_no_existing_user()["password"]}, #invalid body shema parameters
-                             {},  #invalid body shema emtpy
-                             {"username":"","password": get_no_existing_user()["password"]}, #invalid body shema no username
-                             {"username":get_existing_user()["username"],"password": ""}, #invalid body shema no password
+                           {},  #invalid body shema emtpy
+                            
                         ]
-                )
-    def case_negative_invalid_body_request (self,body):
-        """negative :invalid body"""
+                )    
+    def case_negative_empty_body_request(self,body):
+        """negative :empty body""" 
         self.body=body
         self.status_code=400
         return self.body,self.headers,self.parameters,self.response_schema,self.status_code    
-
-        
+       
 #####################################################################################
 @parametrize_with_cases("body,headers,parameters,response_schema,status_code", cases=TestCase)
-def test_login_user_by_username_and_password(body,headers,parameters,response_schema,status_code):
+def test_login_user_by_username_and_password(body,headers,parameters,response_schema,status_code,BASEURL):
     data=json.dumps(body)
-    url=f"{get_url()}/login"
+    url=f"{BASEURL}/login"
     response = requests.request(method="POST",url=url,data=data,headers=headers)
     assert response.status_code==status_code, "Invalid response" 
      
