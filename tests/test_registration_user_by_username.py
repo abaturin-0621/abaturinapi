@@ -6,7 +6,7 @@ import requests
 import json
 from pytest_cases import  parametrize_with_cases, case, get_case_id, parametrize,fixture_ref
 from pytest_schema import  schema, And, Enum, Optional, Or, Regex, SchemaError
-
+from utils.utils import *
 
 def get_url():
     ###TODO  must be config 
@@ -29,11 +29,6 @@ def get_existing_user():
               "username":"myusertest1", 
               "password":"myusertest1"
               }
-
-# class InputCaseContext():
-     
-
-
 
 
 class TestCase():
@@ -86,18 +81,15 @@ class TestCase():
         self.status_code=400
         return self.body,self.headers,self.parameters,self.response_schema,self.status_code   
     
-     # #####################################################################################
-    @parametrize("username",[ "UNIQ_USER","long_name"])    
-    @parametrize("password",[ "emty_pass","long_pass"])   
+    ######################################################################################
+    @parametrize("username",[VALID_NONE,VALID_BOOLEAN,VALID_NUMBER_INT,VALID_NUMBER_FLOAT,VALID_SLASH,VALID_SHORT_STRING,VALID_LONG_STRING,VALID_QUOTE])    
+    @parametrize("password",[VALID_NONE,VALID_BOOLEAN,VALID_NUMBER_INT,VALID_NUMBER_FLOAT,VALID_SLASH,VALID_SHORT_STRING,VALID_LONG_STRING,VALID_QUOTE])   
     def case_negative_invalid_body_request(self,username,password):
         """negative :invalid body""" 
         self.body["username"]=username
         self.body["password"]=password
         self.status_code=400
         return self.body,self.headers,self.parameters,self.response_schema,self.status_code   
-
-
-
 
     #####################################################################################
     @parametrize("headers",
