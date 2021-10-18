@@ -92,9 +92,9 @@ class TestCase:
 
 #####################################################################################
 @parametrize_with_cases("body,headers,parameters,response_schema,status_code", cases=TestCase)
-def test_registration_user_by_username(body,headers,parameters,response_schema,status_code):
+def test_registration_user_by_username(body,headers,parameters,response_schema,status_code,BASEURL):
     data=json.dumps(body)
-    url=f"{get_url()}/registration"
+    url=f"{BASEURL}/registration"
     response = requests.request(method="POST",url=url,data=data,headers=headers)
     assert response.status_code==status_code, "Invalid response" 
      

@@ -24,3 +24,30 @@ def UNIQ_USER():
               "username":f"user_{unique}", 
               "password":f"password_{unique}"
               }              
+
+@pytest.fixture()
+def SENDER_USER():
+    """Return username and password by template : sender_{timestamp}"""
+    unique=calendar.timegm(time.gmtime())
+    return  {
+              "username":f"sender_{unique}", 
+              "password":f"password_{unique}"
+              }        
+
+@pytest.fixture()
+def RECEIVER_USER():
+    """Return username and password by template : receiver_{timestamp}"""
+    unique=calendar.timegm(time.gmtime())
+    return  {
+              "username":f"receiver_{unique}", 
+              "password":f"password_{unique}"
+              }    
+
+@pytest.fixture()
+def EXISTING_USER():
+    """Return existing username and password by template : receiver_{timestamp}"""
+    unique=calendar.timegm(time.gmtime())
+    return  {
+              "username":"myusertest1", 
+              "password":"myusertest1"
+              }                
