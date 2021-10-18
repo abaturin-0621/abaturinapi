@@ -33,8 +33,7 @@ def get_existing_user():
 
 class TestCase():
     """TestCase method: Registration user by username"""
-    
-    
+      
     body={
         "username": "username",
         "password": "password"
@@ -50,7 +49,7 @@ class TestCase():
 
 
     #####################################################################################
-    def case_positive_request(self,UNIQ_USER):
+    def case_positive_request(self,UNIQ_USER): ##UNIQ_USER fixture ,  see  conftest.py
         """positive:  valid request"""   
         self.body={
         "username": UNIQ_USER["username"],
@@ -59,7 +58,7 @@ class TestCase():
         self.status_code=201
         return self.body,self.headers,self.parameters,self.response_schema,self.status_code
     #####################################################################################
-    def case_negative_user_already_exists (self,EXISTING_USER):
+    def case_negative_user_already_exists (self,EXISTING_USER):##EXISTING_USER fixture ,  see  conftest.py
         """negative :user_already_exists"""  
         self.body={
         "username": EXISTING_USER["username"],
@@ -110,6 +109,9 @@ class TestCase():
 def test_registration_user_by_username(body,headers,parameters,response_schema,status_code,BASEURL):
     data=json.dumps(body)
     url=f"{BASEURL}/registration"
+    print(data)
+    print(headers)
     response = requests.request(method="POST",url=url,data=data,headers=headers)
     assert response.status_code==status_code, "Invalid response" 
+    
      
