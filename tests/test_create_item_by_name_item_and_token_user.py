@@ -7,59 +7,6 @@ from pytest_cases import  parametrize_with_cases, case, get_case_id, parametrize
 from pytest_schema import  schema, And, Enum, Optional, Or, Regex, SchemaError
 from utils.utils import *
 
-
-# def get_url():
-#     ###TODO  must be config 
-#     return "http://127.0.0.1:5000"
-
-# def get_unique_user():
-#     """Return username and password by template : user_{timestamp}"""
-
-#     unique=calendar.timegm(time.gmtime())
-#     return  {
-#               "username":f"user_{unique}", 
-#               "password":f"password_{unique}"
-#               }
-
-# def get_existing_user():
-#     ###TODO  must be query db or get request
-#     """Return  existing username and password """
-    
-#     return  {
-#               "username":"myusertest1", 
-#               "password":"myusertest1"
-#         }
-
-
-# def get_existing_token():
-#     ###TODO  must be query db or get request
-#     """Return  existing user token and item name """
-#     body={ 
-#         "username":"myusertest1", 
-#         "password":"myusertest1"
-#     }
-#     headers={'Content-Type': 'application/json'}
-#     data=json.dumps(body)
-#     url=f"{get_url()}/login"
-#     try:
-#         response = requests.request(method="POST",url=url,data=data,headers=headers)
-#         token=response.json()["token"]
-#     except Exception:
-#          assert 0, "Error get existing token"
-
-#     return  {
-#               "token":token, 
-#               "name":"myobject1"
-#         }
-
-# def get_invalid_token():
-#     ###TODO  must be query db or get request
-#     """Return no existing user token and item name """
-#     return  {
-#               "token":"token_invalid", 
-#               "name":"myobject1"
-#         }        
-
 class TestCase:
     """TestCase method: Create item by name item and token user"""
 
