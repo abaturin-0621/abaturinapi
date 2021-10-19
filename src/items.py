@@ -5,8 +5,8 @@ from models.models import Item,User
 
 api = Namespace('Items',path='/',description="Items managment")
 
-item_shema = api.model(
-    'item_shema',
+item_new_shema = api.model(
+    'item_new_shema',
         {
         'token': fields.String(required=True, description='The token'),
         'name': fields.String(required=True, description='The name item',min_length=2,max_length=20),
@@ -47,7 +47,12 @@ items_shema_response_200 = api.model("items_shema_response_200", {
     
 })
 
-
+user_login_shema_response_401= api.model(
+    'user_login_shema_response_401',
+        {
+        "message": fields.String(default="Unauthorized")
+        }
+    )    
 
 
 item_send_shema = api.model(
@@ -68,6 +73,33 @@ item_send_shema_response_200 = api.model(
         }
     )
 
+item_get_shema_response_200 = api.model(
+    'item_get_shema_response_200',
+        {
+        'link': fields.String(required=True, description='Item is bound to the user'),
+        
+        }
+    )    
+item_send_response_409= api.model(
+    'item_send_response_409',
+        {
+        "message": fields.String(default="The object is already owned by the user")
+        }
+    )   
+
+item_send_response_404= api.model(
+    'item_send_response_404',
+        {
+        "message": fields.String(default="The item not found")
+        }
+    )       
+
+item_get_response_400= api.model(
+    'item_get_response_400',
+        {
+        "message": fields.String(default="Bad request")
+        }
+    )      
 
 
 @api.route("/items/new",methods = ["POST"])
@@ -75,8 +107,9 @@ item_send_shema_response_200 = api.model(
 @api.route("/items",methods =["GET"])
 class ItemClass(Resource):
     @api.doc(description='Create  item by name item and token user')
-    @api.expect(item_shema,validate=True)
+    @api.expect(item_new_shema,validate=True)
     @api.response(code=201, description="Success",model=item_new_shema_response_201)
+    @api.response(code=401, description="Error",model=user_login_shema_response_401)
     def post(self):
         token = request.json.get("token")
         name  = request.json.get("name")   
@@ -99,6 +132,8 @@ class ItemClass(Resource):
     @api.doc(description='Delete  item by  item id  and token user')
     @api.expect(items_shema,validate=True)
     @api.response(code=200, description="Success",model=item_delete_shema_response_200)
+    @api.response(code=401, description="Error",model=user_login_shema_response_401)
+    @api.response(code=404, description="Error",model=item_send_response_404)
     def delete(self,id):
         token=request.json.get("token")
         user=User.decode_auth_token(token)
@@ -120,6 +155,7 @@ class ItemClass(Resource):
     @api.doc(description='Get items by token user')
     @api.expect(items_shema,validate=True)
     @api.response(code=200, description="Success",model=items_shema_response_200)
+    @api.response(code=401, description="Error",model=user_login_shema_response_401)
     def get(self):
         token=(request.json.get('token'))
     
@@ -139,6 +175,9 @@ class ItemOperationsClass(Resource):
     @api.doc(description='Generating a link to get an items')
     @api.expect(item_send_shema,validate=True)
     @api.response(code=200, description="Success",model=item_send_shema_response_200)
+    @api.response(code=401, description="Error",model=user_login_shema_response_401)
+    @api.response(code=404, description="Error",model=item_send_response_404)
+    @api.response(code=409, description="Error",model=item_send_response_409)
     def post(self):
         id = request.json.get("id")
         token_sender=request.json.get("token")
@@ -178,8 +217,10 @@ class ItemOperationsClass(Resource):
         'token': {'description': 'The token user receiver', 'in': 'query', 'type': 'string',"required":"True"}
             } 
         )
-   
-   
+    @api.response(code=200, description="Success",model=item_get_shema_response_200)    
+    @api.response(code=401, description="Error",model=user_login_shema_response_401) 
+    @api.response(code=400, description="Error",model=item_get_response_400)
+    @api.response(code=404, description="Error",model=item_send_response_404)
     def get(self):
         id = request.args.get("id")
         token=request.args.get('token')

@@ -37,7 +37,7 @@ user_registration_shema_response_409= api.model(
 user_login_shema_response_401= api.model(
     'user_login_shema_response_401',
         {
-        "message": fields.String(default="The user with such a login already exists")
+        "message": fields.String(default="Unauthorized")
         }
     )       
 
@@ -54,7 +54,7 @@ class RegistrationClass(Resource):
         password  = request.json.get("password")   
 
         if User.query.filter_by(username = username).first():
-            abort(409, "The user with such a login already exists. Please choose another login")
+            abort(409, "The user with such a login already exists")
 
         try:       
             hash_pass = bcrypt.generate_password_hash(password)     
