@@ -1,6 +1,8 @@
 import calendar
 import time
 import pytest
+import json
+import requests
 
 def pytest_addoption(parser):
     parser.addoption("--baseUrl", action="store", default="http://127.0.0.1:5000",help="baseUrl")
@@ -60,3 +62,32 @@ def NO_EXISTING_USER():
               "username":"myusertestnone", 
               "password":"myusertestnone"
               }                
+@pytest.fixture(scope="function")
+def EXISTING_TOKEN(BASEURL):
+    ###TODO  must be query db or get request
+    """Return  existing user token and item name """
+    body={ 
+        "username":"myusertest1", 
+        "password":"myusertest1"
+    }
+    headers={'Content-Type': 'application/json'}
+    data=json.dumps(body)
+    url=f"{BASEURL}/login"
+    try:
+        response = requests.request(method="POST",url=url,data=data,headers=headers)
+        token=response.json()["token"]
+    except Exception:
+         assert 0, "Error get existing token"
+
+    return  {
+              "token":token, 
+              "name":"myobject1"
+        }              
+@pytest.fixture()
+def NO_EXISTING_TOKEN():
+    ###TODO  must be query db or get request
+    """Return no existing user token and item name """
+    return  {
+              "token":"token_invalid", 
+              "name":"myobject1"
+        }            
