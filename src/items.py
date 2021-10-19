@@ -202,7 +202,7 @@ class ItemOperationsClass(Resource):
         except Exception:
             abort(500, "Internal Server Error")     
 
-        link=f"{request.host_url}get?id={id}&token={token_receiver}"
+        link=f"{request.host_url}api/get?id={id}&token={token_receiver}"
         response={
             'link':link,
         }

@@ -9,7 +9,7 @@ from pytest_schema import  schema, And, Enum, Optional, Or, Regex, SchemaError
 
 def get_url():
     ###TODO  must be config 
-    return "http://127.0.0.1:5000"
+    return "http://127.0.0.1:5000/api"
 
 def get_unique_user(prefix=None):
     """Return username and password by template : user_{timestamp}"""

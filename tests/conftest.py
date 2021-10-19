@@ -5,7 +5,7 @@ import json
 import requests
 
 def pytest_addoption(parser):
-    parser.addoption("--baseUrl", action="store", default="http://127.0.0.1:5000",help="baseUrl")
+    parser.addoption("--baseUrl", action="store", default="http://127.0.0.1:5000/api",help="baseUrl")
 
 
 
