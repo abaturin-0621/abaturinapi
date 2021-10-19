@@ -62,7 +62,7 @@ def NO_EXISTING_USER():
               "username":"myusertestnone", 
               "password":"myusertestnone"
               }                
-@pytest.fixture(scope="function")
+@pytest.fixture()
 def EXISTING_TOKEN(BASEURL):
     """Return  existing user token and item name """
     body={ 
