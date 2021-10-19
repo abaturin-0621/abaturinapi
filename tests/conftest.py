@@ -64,7 +64,6 @@ def NO_EXISTING_USER():
               }                
 @pytest.fixture(scope="function")
 def EXISTING_TOKEN(BASEURL):
-    ###TODO  must be query db or get request
     """Return  existing user token and item name """
     body={ 
         "username":"myusertest1", 
@@ -85,9 +84,54 @@ def EXISTING_TOKEN(BASEURL):
         }              
 @pytest.fixture()
 def NO_EXISTING_TOKEN():
-    ###TODO  must be query db or get request
     """Return no existing user token and item name """
     return  {
               "token":"token_invalid", 
               "name":"myobject1"
         }            
+
+@pytest.fixture()
+def EXISTING_ITEM(BASEURL):
+    """Return existing item"""
+    body={ 
+        "username":"myusertest1", 
+        "password":"myusertest1"
+    }
+    headers={'Content-Type': 'application/json'}
+    data=json.dumps(body)
+    url=f"{BASEURL}/login"
+    try:
+        response = requests.request(method="POST",url=url,data=data,headers=headers)
+        token=response.json()["token"]
+    except Exception:
+         assert 0, "Error get existing token"
+
+
+    body={ 
+        "token":token, 
+        "name":"myobject1"
+    }
+    headers={'Content-Type': 'application/json'}
+    data=json.dumps(body)
+    url=f"{BASEURL}/items/new"
+    try:
+        response = requests.request(method="POST",url=url,data=data,headers=headers)
+        item_id=response.json()["id"]
+        
+    except Exception:
+         assert 0, "Error create new item"     
+
+
+
+    return  {
+              "item_id":item_id,
+              "token":token 
+        }      
+@pytest.fixture()
+def NO_EXISTING_ITEM():
+    ###TODO  must be query db or get request
+    """Return no existing item"""
+    return  {
+              "item_id":"100", 
+        }            
+           
