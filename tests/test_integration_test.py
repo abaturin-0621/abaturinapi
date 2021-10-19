@@ -21,7 +21,7 @@ def get_unique_user(prefix=None):
               }
 
 
-def test_integration_test():
+def test_integration_test(BASEURL):
     ###Регистрируем пользователя получателя
     ########Registration################
     userreceiver=get_unique_user("rec")["username"]
@@ -33,7 +33,7 @@ def test_integration_test():
     }
     headers={'Content-Type': 'application/json'}
     data=json.dumps(body)
-    url=f"{get_url()}/registration"
+    url=f"{BASEURL}/registration"
     response = requests.request(method="POST",url=url,data=data,headers=headers)
     assert response.status_code==201, "Invalid response" 
 
@@ -48,7 +48,7 @@ def test_integration_test():
     }
     
     data=json.dumps(body)
-    url=f"{get_url()}/registration"
+    url=f"{BASEURL}/registration"
     response = requests.request(method="POST",url=url,data=data,headers=headers)
     assert response.status_code==201, "Invalid response" 
 
@@ -60,7 +60,7 @@ def test_integration_test():
 
     }
     data=json.dumps(body)
-    url=f"{get_url()}/login"
+    url=f"{BASEURL}/login"
     response = requests.request(method="POST",url=url,data=data,headers=headers)
     assert response.status_code==200, "Invalid response"
     ###Создаем объект пользователя отправителя
@@ -73,7 +73,7 @@ def test_integration_test():
 
     }
     data=json.dumps(body)
-    url=f"{get_url()}/items/new"
+    url=f"{BASEURL}/items/new"
     response = requests.request(method="POST",url=url,data=data,headers=headers)
     assert response.status_code==201, "Invalid response"
 
@@ -84,7 +84,7 @@ def test_integration_test():
         "token":token,
     }
     data=json.dumps(body)
-    url=f"{get_url()}/items"
+    url=f"{BASEURL}/items"
     response = requests.request(method="GET",url=url,data=data,headers=headers)
     assert response.status_code==200, "Invalid response"
     item={'id': item_id, 'name': name}
@@ -99,7 +99,7 @@ def test_integration_test():
     }
     print(body)
     data=json.dumps(body)
-    url=f"{get_url()}/send"
+    url=f"{BASEURL}/send"
     response = requests.request(method="POST",url=url,data=data,headers=headers)
     assert response.status_code==200, "Invalid response"
 
@@ -120,7 +120,7 @@ def test_integration_test():
 
     }
     data=json.dumps(body)
-    url=f"{get_url()}/login"
+    url=f"{BASEURL}/login"
     response = requests.request(method="POST",url=url,data=data,headers=headers)
     assert response.status_code==200, "Invalid response"
     
@@ -131,7 +131,7 @@ def test_integration_test():
         "token":token,
     }
     data=json.dumps(body)
-    url=f"{get_url()}/items"
+    url=f"{BASEURL}/items"
     response = requests.request(method="GET",url=url,data=data,headers=headers)
     assert response.status_code==200, "Invalid response"
     item={'id': item_id, 'name': name}
@@ -143,7 +143,7 @@ def test_integration_test():
         "token":token,
     }
     data=json.dumps(body)
-    url=f"{get_url()}/items/{item_id}"
+    url=f"{BASEURL}/items/{item_id}"
     response = requests.request(method="DELETE",url=url,data=data,headers=headers)
     assert response.status_code==200, "Invalid response"
 
@@ -153,7 +153,7 @@ def test_integration_test():
         "token":token,
     }
     data=json.dumps(body)
-    url=f"{get_url()}/items/{item_id}"
+    url=f"{BASEURL}/items/{item_id}"
     response = requests.request(method="DELETE",url=url,data=data,headers=headers)
     assert response.status_code==404, "Invalid response"
  
