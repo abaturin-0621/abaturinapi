@@ -1,3 +1,4 @@
+################## Example input datatype 
 VALID_NONE=None
 VALID_BOOLEAN=True
 VALID_NUMBER_INT=1    
